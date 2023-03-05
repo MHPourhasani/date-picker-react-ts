@@ -1,14 +1,9 @@
+import { HeaderProps, StateType } from '../../types/Header';
 import Arrow from '../Arrow/Arrow';
 import YearPicker from '../YearPicker/YearPicker';
 
-const Header = ({
-	state,
-	setState,
-	onChange,
-	disableMonthPicker,
-	monthAndYears: [months, years],
-}) => {
-	let { date, mustShowYearPicker, minDate, maxDate, year, today } = state,
+const Header: React.FC<HeaderProps> = ({ state, setState, onChange, monthAndYears: [months] }) => {
+	let { date, minDate, maxDate, year }: StateType = state,
 		isPreviousDisable =
 			minDate && date.year <= minDate.year && minDate.monthIndex > date.monthIndex - 1,
 		isNextDisable =
@@ -22,7 +17,7 @@ const Header = ({
 		<div className='flex h-6 w-full items-center justify-between text-15'>
 			<span>هجری شمسی</span>
 
-			{months.map((month, index) => (
+			{months.map((month: string, index: number) => (
 				<div
 					key={index}
 					className='flex w-60 items-center justify-between' // rmdp-header-values
@@ -38,7 +33,7 @@ const Header = ({
 		</div>
 	);
 
-	function getButton(direction) {
+	function getButton(direction: string) {
 		let handleClick = () => increaseValue(direction === 'right' ? 1 : -1),
 			disabled =
 				(direction === 'left' && isPreviousDisable) ||
@@ -47,19 +42,12 @@ const Header = ({
 		return <Arrow direction={direction} onClick={handleClick} disabled={disabled} />;
 	}
 
-	function increaseValue(value) {
+	function increaseValue(value: number) {
 		if ((value < 0 && isPreviousDisable) || (value > 0 && isNextDisable)) return;
 
-		if (!mustShowYearPicker) {
-			date.toFirstOfMonth();
+		date.toFirstOfMonth();
 
-			date.month += value;
-		} else {
-			year = year + value * 12;
-
-			if (value < 0 && minDate && year < minDate.year) year = minDate.year;
-			if (value > 0 && maxDate && year > maxDate.year) year = maxDate.year;
-		}
+		date.month.index += value;
 
 		setState({
 			...state,
