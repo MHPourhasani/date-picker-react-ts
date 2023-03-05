@@ -11,22 +11,32 @@ import { ReactComponent as ArrowDown } from '../../assets/svg/arrow-down.svg';
 // styles
 import styles from '../../styles/scrollbar.module.css';
 
-const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
-	const { date, today, minDate, maxDate, selectedDate, onlyShowInRangeDates, year } = state,
+// types
+import { StateType } from '../../types/Header';
+
+interface YearPickerProps {
+	state: StateType;
+	onChange: (a: any, b: any) => any;
+}
+
+const YearPicker: React.FC<YearPickerProps> = ({ state, onChange }) => {
+	// const { date, today, minDate, maxDate, selectedDate, onlyShowInRangeDates, year }: State =
+	// const { date, today, minDate, maxDate, selectedDate, year }: State = state,
+	const { date, today, minDate, maxDate, selectedDate, year }: StateType = state,
 		digits = date.digits;
 
-	const [selectedYear, setSelectedYear] = useState(today.year);
-	let minYear = today.year - 4;
+	const [selectedYear, setSelectedYear] = useState<number>(today.year);
+	let minYear: number = today.year - 4;
 
 	minYear = minYear - 12 * Math.ceil((minYear - year) / 12);
 
-	const notInRange = (year) => {
+	const notInRange = (year: number) => {
 		return (minDate && year < minDate.year) || (maxDate && year > maxDate.year);
 	};
 
 	const years = useMemo(() => {
-		let years = [],
-			year = minYear;
+		let years: number[] = [],
+			year: number = minYear;
 
 		for (let i = 0; i < 10; i++) {
 			years.push(year);
@@ -36,15 +46,16 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		return years;
 	}, [minYear]);
 
-	const selectYear = (year) => {
+	const selectYear = (year: number) => {
 		if (notInRange(year)) return;
 
-		let date = new DateObject(state.date).setYear(year);
+		// let date: DateObject = new DateObject(date).setYear(year);
+		let date: DateObject = new DateObject().setYear(year);
 
 		if (minDate && date.monthIndex < minDate.monthIndex) {
 			date = date.setMonth(minDate.monthIndex + 1);
 		} else if (maxDate && date.monthIndex > maxDate.monthIndex) {
-			date = date.setMonth(maxDate.monthIndex + 1);
+			date= date.setMonth(maxDate.monthIndex + 1);
 		}
 
 		onChange(selectedDate, {
@@ -56,12 +67,13 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 		});
 	};
 
-	const getClassName = (year) => {
+	const getClassName = (year: number) => {
 		let names = ['rmdp-day'];
 
 		if (notInRange(year)) names.push('text-secondary400'); // rmdp-disabled
 
-		if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // rmdp-disabled
+		// if (names.includes('text-secondary400') && onlyShowInRangeDates) return; // rmdp-disabled
+		if (names.includes('text-secondary400')) return; // rmdp-disabled
 
 		if (today.year === year) names.push('text-primary'); // rmdp-today
 
@@ -89,7 +101,8 @@ const YearPicker = ({ state, onChange, handleFocusedDate, onYearChange }) => {
 					leave='transition ease-in duration-100'
 					leaveFrom='opacity-100'
 					leaveTo='opacity-0'
-					className={styles.scrollbar_hidden}>
+					// className={styles.scrollbar_hidden}
+					>
 					<Listbox.Options className='absolute h-60 w-36 overflow-y-scroll rounded-md border-1 border-secondary300 bg-white py-1 text-15 shadow-calendar focus:outline-none'>
 						{years.map((year) => (
 							<Listbox.Option
