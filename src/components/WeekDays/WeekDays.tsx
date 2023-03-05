@@ -1,14 +1,13 @@
 import { useMemo } from 'react';
 import isArray from '../../common/isArray';
 
-interface Props {customWeekDays: string[],
-	weekStartDayIndex: number,
-	className: string,}
+// types
+import { WeekDaysProps } from '../../types/WeekDays';
 
-const WeekDays: React.FC<Props> = ({
-	customWeekDays=[],
-	weekStartDayIndex=1,
-	className='',
+const WeekDays: React.FC<WeekDaysProps> = ({
+	customWeekDays = [],
+	weekStartDayIndex = 1,
+	className = '',
 }) => {
 	let weekDays = useMemo(() => {
 		let weekDays: string[] = customWeekDays;
@@ -17,7 +16,7 @@ const WeekDays: React.FC<Props> = ({
 			weekDays.length = 7;
 
 			weekDays = weekDays.map((weekDay) => {
-				if (isArray(weekDay) && (weekDay.length > 1)) {
+				if (isArray(weekDay) && weekDay.length > 1) {
 					weekDay = weekDay[1];
 				} else if (isArray(weekDay)) {
 					weekDay = weekDay[0];
@@ -36,9 +35,8 @@ const WeekDays: React.FC<Props> = ({
 
 	return (
 		// rmdp-week
-		<div
-			className={className}>
-			{weekDays.map((weekDay:string, index:number) => (
+		<div className={className}>
+			{weekDays.map((weekDay: string, index: number) => (
 				<span key={index} className='flex w-12 h-12 items-center justify-center'>
 					{weekDay}
 				</span>
