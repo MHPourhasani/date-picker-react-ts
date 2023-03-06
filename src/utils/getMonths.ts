@@ -1,8 +1,7 @@
-import DateObject from 'react-date-object';
+import DateObject, { DateType } from 'react-date-object';
 
-// const getMonths = (date, showOtherDays, numberOfMonths, weekStartDayIndex) => {
-const getMonths = (date, numberOfMonths, weekStartDayIndex) => {
-if (!date) return [];
+const getMonths = (date: DateType, numberOfMonths: number, weekStartDayIndex: number) => {
+	if (!date) return [];
 
 	let months = [];
 
