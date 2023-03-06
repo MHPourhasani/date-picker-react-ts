@@ -1,6 +1,6 @@
-import DateObject from 'react-date-object';
+import DateObject, { DateType } from 'react-date-object';
 
-const toDateObject = (date, calendar) => {
+const toDateObject = (date: DateType, calendar: any) => {
 	if (date instanceof DateObject) {
 		date.setCalendar(calendar);
 	} else {
